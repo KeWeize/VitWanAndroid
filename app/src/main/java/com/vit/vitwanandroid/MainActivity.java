@@ -1,11 +1,13 @@
 package com.vit.vitwanandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.vit.vitwanandroid.bean.RxHomeBannerItem;
+import com.vit.vitwanandroid.modul.TestFragmentActivity;
 import com.vit.vitwanandroid.net.ApiWrapper;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn02:
-                Toast.makeText(this, "click btn01", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, TestFragmentActivity.class));
                 break;
 
             default:
