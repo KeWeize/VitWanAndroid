@@ -54,8 +54,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(getLayoutId(), null);
-        unbinder = ButterKnife.bind(rootView);
+        rootView = inflater.inflate(getLayoutId(), container, false);
+        unbinder = ButterKnife.bind(this, rootView);
+        initView();
         return rootView;
     }
 

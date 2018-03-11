@@ -1,9 +1,8 @@
-package com.vit.vitwanandroid.modul;
+package com.vit.vitwanandroid.modul.fragment;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseFragment;
@@ -16,32 +15,25 @@ import butterknife.OnClick;
  * @date 2018/3/8
  */
 
-public class TestFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
 
-    @BindView(R.id.btn_test)
-    Button btn;
-
-    public static TestFragment newInstance() {
+    public static HomeFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        TestFragment fragment = new TestFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.frag_test;
+        return R.layout.frag_home;
     }
 
     @Override
     protected void initView() {
     }
 
-    @OnClick({R.id.btn_test})
-    public void onViewClick(View view) {
-
-    }
 
 }
