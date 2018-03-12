@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
+import com.vit.vitwanandroid.utils.ToastUtils;
 import com.vit.vitwanandroid.widget.VitStatusLayout;
 
 import butterknife.BindView;
@@ -42,6 +43,7 @@ public class TestFragment extends BaseStatusFragment {
             @Override
             public void run() {
                 showContentView();
+                ToastUtils.showShort("数据加载成功");
             }
         }, 3000);
     }
