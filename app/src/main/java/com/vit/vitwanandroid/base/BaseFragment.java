@@ -4,10 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.vit.vitwanandroid.utils.LogUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,7 +34,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 是否需要懒加载
      */
-    private boolean isLazyMode;
+    protected boolean isLazyMode;
 
     /**
      * 控件是否准备好（已初始化）
@@ -99,7 +102,6 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
         if (isLazyMode) {
             if (getUserVisibleHint()) {
                 onFragmentVisible();
