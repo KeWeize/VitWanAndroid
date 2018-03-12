@@ -1,6 +1,5 @@
 package com.vit.vitwanandroid.modul;
 
-import android.nfc.Tag;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -16,7 +15,7 @@ public class TestFragmentActivity extends BaseActivity {
 
     @Override
     protected int getContentLayout() {
-        return R.layout.activity_fragment;
+        return R.layout.base_activity_simple;
     }
 
     @Override
