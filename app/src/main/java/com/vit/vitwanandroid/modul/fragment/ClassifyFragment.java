@@ -2,12 +2,9 @@ package com.vit.vitwanandroid.modul.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 
 import com.vit.vitwanandroid.R;
-import com.vit.vitwanandroid.base.BaseFragment;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
-import com.vit.vitwanandroid.utils.LogUtils;
 import com.vit.vitwanandroid.widget.VitStatusLayout;
 
 import butterknife.BindView;

@@ -1,5 +1,7 @@
 package com.vit.vitwanandroid.net;
 
+import com.vit.vitwanandroid.bean.RxArticleData;
+import com.vit.vitwanandroid.bean.RxArticleItem;
 import com.vit.vitwanandroid.bean.RxHomeBannerItem;
 
 import java.util.List;
@@ -21,5 +23,13 @@ public interface ApiService {
      */
     @GET(ApiUrl.HOME_BANNER)
     Observable<HttpResult<List<RxHomeBannerItem>>> getHomeBanner();
+
+    /**
+     * 首页文章
+     *
+     * @return
+     */
+    @GET(ApiUrl.HOME_ARTICLE)
+    Observable<HttpResult<RxArticleData>> getHomeArticle();
 
 }

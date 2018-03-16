@@ -3,7 +3,8 @@ package com.vit.vitwanandroid;
 import android.app.Application;
 import android.content.Context;
 
-import com.vit.vitwanandroid.utils.VitApp;
+import com.vit.vitwanandroid.utils.common.VitApp;
+import com.vit.vitwanandroid.utils.imageload.GlideLoader;
 
 /**
  * @author kewz

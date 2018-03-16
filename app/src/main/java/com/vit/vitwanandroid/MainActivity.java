@@ -12,7 +12,7 @@ import com.vit.vitwanandroid.modul.fragment.ClassifyFragment;
 import com.vit.vitwanandroid.modul.fragment.HomeFragment;
 import com.vit.vitwanandroid.modul.fragment.MineFragment;
 import com.vit.vitwanandroid.modul.fragment.ProjectFragment;
-import com.vit.vitwanandroid.utils.BottomNavigationViewHelper;
+import com.vit.vitwanandroid.utils.btmnav.BottomNavigationViewHelper;
 
 public class MainActivity extends BaseActivity {
 

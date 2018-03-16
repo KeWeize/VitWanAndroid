@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.vit.vitwanandroid.widget.VitStatusLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vsl_status"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refreshlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home" />
+    <com.vit.vitwanandroid.widget.VitStatusLayout
+        android:id="@+id/vsl_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</com.vit.vitwanandroid.widget.VitStatusLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_180" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_home_article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </com.vit.vitwanandroid.widget.VitStatusLayout>
+
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

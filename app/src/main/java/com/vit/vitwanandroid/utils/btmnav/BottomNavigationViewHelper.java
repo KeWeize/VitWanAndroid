@@ -1,4 +1,4 @@
-package com.vit.vitwanandroid.utils;
+package com.vit.vitwanandroid.utils.btmnav;
 
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;

@@ -14,4 +14,9 @@ public class ApiUrl {
      */
     public static final String HOME_BANNER = "banner/json";
 
+    /**
+     * 首页文章
+     */
+    public static final String HOME_ARTICLE = "article/list/0/json";
+
 }

@@ -1,4 +1,4 @@
-package com.vit.vitwanandroid.utils;
+package com.vit.vitwanandroid.utils.common;
 
 import android.support.annotation.IntDef;
 import android.util.Log;

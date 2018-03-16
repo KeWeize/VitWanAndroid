@@ -1,6 +1,8 @@
 package com.vit.vitwanandroid.net;
 
 
+import com.vit.vitwanandroid.bean.RxArticleData;
+import com.vit.vitwanandroid.bean.RxArticleItem;
 import com.vit.vitwanandroid.bean.RxHomeBannerItem;
 
 import java.util.List;
@@ -39,6 +41,15 @@ public class ApiWrapper extends ApiBase {
                 .compose(this.<List<RxHomeBannerItem>>applySchedulers());
     }
 
+    /**
+     * 获取首页文章
+     *
+     * @return
+     */
+    public Observable<RxArticleData> getHomeArticle() {
+        return getDefault().getHomeArticle()
+                .compose(this.<RxArticleData>applySchedulers());
+    }
 
 
     /*####################### 文件提交相关 #########################*/

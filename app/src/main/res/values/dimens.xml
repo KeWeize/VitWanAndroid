@@ -3,7 +3,7 @@
 
     <!-- statuslayout -->
     <dimen name="statuslayout_status_ic_size">65dp</dimen>
-    <dimen name="statuslayout_status_ic_margintop">-56dp</dimen>
+    <dimen name="statuslayout_status_ic_margintop">-14dp</dimen>
 
 
     <!--################################## comment start #########################################-->
