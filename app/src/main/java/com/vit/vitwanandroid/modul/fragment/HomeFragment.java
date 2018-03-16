@@ -1,35 +1,36 @@
 package com.vit.vitwanandroid.modul.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.vit.vitwanandroid.R;
-import com.vit.vitwanandroid.base.BaseFragment;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
+import com.vit.vitwanandroid.bean.HomeMultiItem;
 import com.vit.vitwanandroid.bean.RxArticleData;
-import com.vit.vitwanandroid.bean.RxArticleItem;
 import com.vit.vitwanandroid.bean.RxHomeBannerItem;
-import com.vit.vitwanandroid.modul.fragment.adapter.HomeArticleAdapter;
+import com.vit.vitwanandroid.modul.fragment.adapter.HomeAdapter;
 import com.vit.vitwanandroid.net.ApiWrapper;
-import com.vit.vitwanandroid.utils.banner.GlideBannerImageLoader;
+import com.vit.vitwanandroid.net.rxjava.RxZipModel;
 import com.vit.vitwanandroid.widget.VitStatusLayout;
-import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -37,18 +38,18 @@ import io.reactivex.functions.Consumer;
  * @date 2018/3/8
  */
 
-public class HomeFragment extends BaseStatusFragment implements OnRefreshListener {
+public class HomeFragment extends BaseStatusFragment implements OnRefreshListener, OnLoadmoreListener {
 
     @BindView(R.id.refreshlayout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.vsl_status)
     VitStatusLayout statusLayout;
-    @BindView(R.id.banner)
-    Banner bannerHome;
-    @BindView(R.id.rv_home_article)
-    RecyclerView rvHomeArticle;
+    @BindView(R.id.rv_home)
+    RecyclerView rvHome;
 
-    private HomeArticleAdapter adapterHomeArticle;
+    private int page;
+    private HomeAdapter adapterHome;
+    private ImmersionBar immersionBar;
 
     public static HomeFragment newInstance() {
 
@@ -57,6 +58,18 @@ public class HomeFragment extends BaseStatusFragment implements OnRefreshListene
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        immersionBar = ImmersionBar.with(getActivity(), this)
+                //使用该属性,必须指定状态栏颜色
+                .fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .addTag(TAG);
+        immersionBar.init();
     }
 
     @Override
@@ -74,49 +87,82 @@ public class HomeFragment extends BaseStatusFragment implements OnRefreshListene
         //首页Banner
         refreshLayout.setRefreshHeader(new ClassicsHeader(mContext));
         refreshLayout.setOnRefreshListener(this);
-        bannerHome.setImageLoader(new GlideBannerImageLoader());
+        refreshLayout.setEnableLoadmore(true);
+        refreshLayout.setOnLoadmoreListener(this);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(mContext)
+                .setSpinnerStyle(SpinnerStyle.Translate));
         //文章列表
-        adapterHomeArticle = new HomeArticleAdapter();
-        rvHomeArticle.setAdapter(adapterHomeArticle);
-        rvHomeArticle.setLayoutManager(new LinearLayoutManager(mContext));
+        adapterHome = new HomeAdapter();
+        rvHome.setAdapter(adapterHome);
+        rvHome.setLayoutManager(new LinearLayoutManager(mContext));
 
         showLoadingView();
-        getHomeBanner();
-        getHomeArticle();
+        getHomeData();
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshlayout) {
-        getHomeBanner();
+        page = 0;
+        getHomeData();
     }
 
-    private void getHomeBanner() {
-        ApiWrapper.getInstance().getHomeBanner().subscribe(new Consumer<List<RxHomeBannerItem>>() {
+    @Override
+    public void onLoadmore(RefreshLayout refreshlayout) {
+        page ++;
+        getMoreArticle();
+    }
+
+    private void getHomeData() {
+        Observable<List<RxHomeBannerItem>> obBanner = ApiWrapper.getInstance().getHomeBanner();
+        Observable<RxArticleData> obArticle = ApiWrapper.getInstance().getHomeArticle(page);
+        Log.d(TAG, "getHomeData: ");
+        Observable.zip(obBanner, obArticle, new BiFunction<List<RxHomeBannerItem>,
+                RxArticleData, RxZipModel.Model2<List<RxHomeBannerItem>, RxArticleData>>() {
             @Override
-            public void accept(List<RxHomeBannerItem> rxHomeBannerItems) throws Exception {
-                List<String> imagePaths = new ArrayList<>();
-                List<String> titles = new ArrayList<>();
-                for (int i=0; i<rxHomeBannerItems.size(); i++) {
-                    imagePaths.add(rxHomeBannerItems.get(i).getImagePath());
-                    titles.add(rxHomeBannerItems.get(i).getTitle());
-                }
-                bannerHome.releaseBanner();
-                bannerHome.setImages(imagePaths);
-                bannerHome.setBannerTitles(titles);
-                showContentView();
-                refreshLayout.finishRefresh();
-                bannerHome.start();
+            public RxZipModel.Model2<List<RxHomeBannerItem>, RxArticleData> apply(List<RxHomeBannerItem> rxHomeBannerItems, RxArticleData rxArticleData) throws Exception {
+                return new RxZipModel.Model2<>(rxHomeBannerItems, rxArticleData);
+            }
+        }).subscribe(new Consumer<RxZipModel.Model2<List<RxHomeBannerItem>, RxArticleData>>() {
+            @Override
+            public void accept(RxZipModel.Model2<List<RxHomeBannerItem>, RxArticleData> listRxArticleDataModel2) throws Exception {
+                setHomeData(listRxArticleDataModel2.getModel1(), listRxArticleDataModel2.getModel2());
             }
         });
     }
 
-    private void getHomeArticle() {
-        ApiWrapper.getInstance().getHomeArticle().subscribe(new Consumer<RxArticleData>() {
+    private void setHomeData(List<RxHomeBannerItem> rxHomeBannerItems, RxArticleData rxArticleData) {
+        List<HomeMultiItem> homeMultiItems = new ArrayList<>();
+        homeMultiItems.add(new HomeMultiItem(rxHomeBannerItems));
+        homeMultiItems.add(new HomeMultiItem(getString(R.string.home_new_article)));
+        for (int i=0; i<rxArticleData.getDatas().size(); i++) {
+            homeMultiItems.add(new HomeMultiItem(rxArticleData.getDatas().get(i)));
+        }
+        adapterHome.setNewData(homeMultiItems);
+        showContentView();
+        refreshLayout.finishRefresh();
+    }
+
+    private void getMoreArticle() {
+        ApiWrapper.getInstance().getHomeArticle(page).subscribe(new Consumer<RxArticleData>() {
             @Override
             public void accept(RxArticleData rxArticleData) throws Exception {
-                adapterHomeArticle.setNewData(rxArticleData.getDatas());
+                List<HomeMultiItem> homeMultiItems = new ArrayList<>();
+                for (int i=0; i<rxArticleData.getDatas().size(); i++) {
+                    homeMultiItems.add(new HomeMultiItem(rxArticleData.getDatas().get(i)));
+                }
+                adapterHome.addData(homeMultiItems);
+                refreshLayout.finishLoadmore();
             }
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && immersionBar != null) {
+            immersionBar.getTag(TAG)
+                    .init();
+        }
     }
 
 }

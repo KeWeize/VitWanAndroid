@@ -46,8 +46,8 @@ public class ApiWrapper extends ApiBase {
      *
      * @return
      */
-    public Observable<RxArticleData> getHomeArticle() {
-        return getDefault().getHomeArticle()
+    public Observable<RxArticleData> getHomeArticle(int page) {
+        return getDefault().getHomeArticle(page)
                 .compose(this.<RxArticleData>applySchedulers());
     }
 

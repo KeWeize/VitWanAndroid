@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * @author kewz
@@ -29,7 +30,7 @@ public interface ApiService {
      *
      * @return
      */
-    @GET(ApiUrl.HOME_ARTICLE)
-    Observable<HttpResult<RxArticleData>> getHomeArticle();
+    @GET(ApiUrl.HOME_ARTICLE + "{page}" + ApiUrl.BASE_SUF)
+    Observable<HttpResult<RxArticleData>> getHomeArticle(@Path("page") int page);
 
 }

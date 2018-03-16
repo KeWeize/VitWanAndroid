@@ -1,12 +1,15 @@
 package com.vit.vitwanandroid;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.base.BaseActivity;
 import com.vit.vitwanandroid.modul.fragment.ClassifyFragment;
 import com.vit.vitwanandroid.modul.fragment.HomeFragment;
@@ -29,6 +32,12 @@ public class MainActivity extends BaseActivity {
     private Fragment mineFragment;
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        ImmersionBar.with(this).init();
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected int getContentLayout() {
         return R.layout.activity_main;
     }
@@ -42,6 +51,11 @@ public class MainActivity extends BaseActivity {
         navigation.setSelectedItemId(R.id.navigation_home);
     }
 
+    @Override
+    protected boolean isInitImmersionBar() {
+        //当前Activity不需要初始化默认的ImmersionBar样式
+        return false;
+    }
 
     /**
      * 显示首页Fragment

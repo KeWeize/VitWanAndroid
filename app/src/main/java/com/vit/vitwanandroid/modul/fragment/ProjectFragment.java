@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseFragment;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
@@ -21,6 +22,8 @@ public class ProjectFragment extends BaseStatusFragment {
     @BindView(R.id.vsl_status)
     VitStatusLayout statusLayout;
 
+    private ImmersionBar immersionBar;
+
     public static ProjectFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -33,6 +36,13 @@ public class ProjectFragment extends BaseStatusFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        immersionBar = ImmersionBar.with(getActivity(), this)
+                //使用该属性,必须指定状态栏颜色
+                .fitsSystemWindows(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true, 0.2f)
+                .addTag(TAG);
+        immersionBar.init();
     }
 
     @Override
@@ -54,5 +64,14 @@ public class ProjectFragment extends BaseStatusFragment {
     @Override
     protected VitStatusLayout initVitStatusLayout() {
         return statusLayout;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && immersionBar != null) {
+            immersionBar.getTag(TAG)
+                    .init();
+        }
     }
 }

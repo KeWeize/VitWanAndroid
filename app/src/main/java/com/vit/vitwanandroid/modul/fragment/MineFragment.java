@@ -1,7 +1,9 @@
 package com.vit.vitwanandroid.modul.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseFragment;
 
@@ -11,6 +13,9 @@ import com.vit.vitwanandroid.base.BaseFragment;
  */
 
 public class MineFragment extends BaseFragment {
+
+
+    private ImmersionBar immersionBar;
 
     public static MineFragment newInstance() {
 
@@ -22,6 +27,15 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        immersionBar = ImmersionBar.with(getActivity(), this)
+                .transparentStatusBar()
+                .addTag(TAG);
+        immersionBar.init();
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.frag_mine;
     }
@@ -30,5 +44,13 @@ public class MineFragment extends BaseFragment {
     protected void initView() {
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && immersionBar != null) {
+            immersionBar.getTag(TAG)
+                    .init();
+        }
+    }
 
 }

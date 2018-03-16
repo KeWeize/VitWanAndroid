@@ -13,4 +13,7 @@
     <string name="statuslayout_status_empty">暂无数据</string>
     <string name="statuslayout_status_netoff">无网络连接</string>
 
+    <!-- HomeFragment -->
+    <string name="home_new_article">最新博文</string>
+
 </resources>
