@@ -5,6 +5,9 @@
     <dimen name="statuslayout_status_ic_size">65dp</dimen>
     <dimen name="statuslayout_status_ic_margintop">-14dp</dimen>
 
+    <!-- tab -->
+    <dimen name="classify_tab_height">45dp</dimen>
+    <dimen name="classify_tab_max_width">125dp</dimen>
 
     <!--################################## comment start #########################################-->
     <!-- comment dp -->

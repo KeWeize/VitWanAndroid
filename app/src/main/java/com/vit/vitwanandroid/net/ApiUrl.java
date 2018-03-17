@@ -17,11 +17,16 @@ public class ApiUrl {
     /**
      * 首页Banner
      */
-    public static final String HOME_BANNER = "banner/json";
+    public static final String HOME_BANNER = "banner" + BASE_SUF;
 
     /**
      * 首页文章
      */
     public static final String HOME_ARTICLE = "article/list/";
+
+    /**
+     * 体系列表
+     */
+    public static final String CLASSIFY = "tree" + BASE_SUF;
 
 }

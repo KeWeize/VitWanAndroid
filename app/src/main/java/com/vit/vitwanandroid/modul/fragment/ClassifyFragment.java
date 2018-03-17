@@ -1,15 +1,22 @@
 package com.vit.vitwanandroid.modul.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
-import com.vit.vitwanandroid.widget.VitStatusLayout;
+import com.vit.vitwanandroid.bean.RxClassifyItem;
+import com.vit.vitwanandroid.modul.classify.adapter.ClassifyFragmentAdapter;
+import com.vit.vitwanandroid.net.ApiWrapper;
+import com.vit.vitwanandroid.widget.recyclertab.RecyclerTabLayout;
+import com.vit.vitwanandroid.widget.vitstatus.VitStatusLayout;
+
+import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author kewz
@@ -20,8 +27,13 @@ public class ClassifyFragment extends BaseStatusFragment {
 
     @BindView(R.id.vsl_status)
     VitStatusLayout statusLayout;
+    @BindView(R.id.rtl_classify)
+    RecyclerTabLayout rtlClassify;
+    @BindView(R.id.vp_classify)
+    ViewPager vpClassify;
 
     private ImmersionBar immersionBar;
+    private ClassifyFragmentAdapter fragmentAdapter;
 
     public static ClassifyFragment newInstance() {
 
@@ -57,12 +69,7 @@ public class ClassifyFragment extends BaseStatusFragment {
     @Override
     protected void initView() {
         showLoadingView();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showEmptyView();
-            }
-        }, 2000);
+        getClassifyData();
     }
 
     @Override
@@ -74,4 +81,22 @@ public class ClassifyFragment extends BaseStatusFragment {
         }
     }
 
+    /**
+     * 获取体系（分类）数据
+     */
+    private void getClassifyData() {
+        ApiWrapper.getInstance().getClassify().subscribe(new Consumer<List<RxClassifyItem>>() {
+            @Override
+            public void accept(List<RxClassifyItem> rxClassifyItems) throws Exception {
+                showContentView();
+                setClassify(rxClassifyItems);
+            }
+        });
+    }
+
+    private void setClassify(List<RxClassifyItem> rxClassifyItems) {
+        fragmentAdapter = new ClassifyFragmentAdapter(getFragmentManager(), rxClassifyItems);
+        vpClassify.setAdapter(fragmentAdapter);
+        rtlClassify.setUpWithViewPager(vpClassify);
+    }
 }

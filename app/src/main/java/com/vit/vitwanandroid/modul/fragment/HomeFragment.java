@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,7 +22,7 @@ import com.vit.vitwanandroid.bean.RxHomeBannerItem;
 import com.vit.vitwanandroid.modul.fragment.adapter.HomeAdapter;
 import com.vit.vitwanandroid.net.ApiWrapper;
 import com.vit.vitwanandroid.net.rxjava.RxZipModel;
-import com.vit.vitwanandroid.widget.VitStatusLayout;
+import com.vit.vitwanandroid.widget.vitstatus.VitStatusLayout;
 
 import java.util.ArrayList;
 import java.util.List;

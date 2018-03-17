@@ -6,9 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.R;
-import com.vit.vitwanandroid.base.BaseFragment;
 import com.vit.vitwanandroid.base.BaseStatusFragment;
-import com.vit.vitwanandroid.widget.VitStatusLayout;
+import com.vit.vitwanandroid.widget.vitstatus.VitStatusLayout;
 
 import butterknife.BindView;
 

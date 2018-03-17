@@ -1,4 +1,4 @@
-package com.vit.vitwanandroid.widget;
+package com.vit.vitwanandroid.widget.vitstatus;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
