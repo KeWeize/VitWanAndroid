@@ -86,12 +86,12 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.navigation_project:
-                fg2Show = projectFragment == null ? ProjectFragment.newInstance() : projectFragment;
+                fg2Show = projectFragment == null ? new ProjectFragment() : projectFragment;
                 tagCurrentFragment = TAG_PROJECT_FRAGMENT;
                 break;
 
             case R.id.navigation_mine:
-                fg2Show = mineFragment == null ? MineFragment.newInstance() : mineFragment;
+                fg2Show = mineFragment == null ? new MineFragment() : mineFragment;
                 tagCurrentFragment = TAG_MINE_FRAGMENT;
                 break;
 

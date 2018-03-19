@@ -14,17 +14,7 @@ import com.vit.vitwanandroid.base.BaseFragment;
 
 public class MineFragment extends BaseFragment {
 
-
     private ImmersionBar immersionBar;
-
-    public static MineFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        MineFragment fragment = new MineFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

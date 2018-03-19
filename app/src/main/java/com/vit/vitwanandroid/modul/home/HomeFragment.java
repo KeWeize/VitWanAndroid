@@ -87,7 +87,7 @@ public class HomeFragment extends BaseMvpFragment<HomePresenter, HomeView> imple
         if (EmptyUtils.isEmpty(homeMultiItems)) {
             //没有更多
             refreshLayout.finishLoadmoreWithNoMoreData();
-            return ;
+            return;
         }
         refreshLayout.setLoadmoreFinished(false);
         if (isRefresh) {
@@ -95,7 +95,7 @@ public class HomeFragment extends BaseMvpFragment<HomePresenter, HomeView> imple
             adapterHome.setNewData(homeMultiItems);
             refreshLayout.finishRefresh();
             statusLayout.showContentView();
-            return ;
+            return;
         }
         adapterHome.addData(homeMultiItems);
         refreshLayout.finishLoadmore();
