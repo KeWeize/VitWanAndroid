@@ -20,10 +20,11 @@ import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.base.BaseFragment;
+import com.vit.vitwanandroid.base.BaseMvpFragment;
 import com.vit.vitwanandroid.bean.HomeMultiItem;
 import com.vit.vitwanandroid.bean.RxArticleData;
 import com.vit.vitwanandroid.bean.RxClassifyItem;
-import com.vit.vitwanandroid.modul.fragment.adapter.HomeAdapter;
+import com.vit.vitwanandroid.modul.home.HomeAdapter;
 import com.vit.vitwanandroid.net.ApiWrapper;
 import com.vit.vitwanandroid.utils.common.EmptyUtils;
 import com.vit.vitwanandroid.widget.fliodlayout.FluidLayout;
@@ -35,10 +36,12 @@ import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 
 /**
- * Created by vitar on 2018/3/18.
+ * @author kewz
+ * @date 2018/3/19
  */
 
-public class ClassifyListFragment extends BaseFragment implements OnRefreshListener, OnLoadmoreListener{
+public class ClassifyListFragment extends BaseMvpFragment<ClassifyPresenter, ClassifyView>
+        implements ClassifyView, OnRefreshListener, OnLoadmoreListener{
 
     private static final String KEY_RXCLASSIFYITEM = "key_rxclassifyitem";
 
@@ -47,11 +50,10 @@ public class ClassifyListFragment extends BaseFragment implements OnRefreshListe
     @BindView(R.id.rv_classify)
     RecyclerView rvClassify;
 
-    private int page;
+    private FluidLayout tagsLayout;
     private HomeAdapter adapterArticle;
     //data
     private RxClassifyItem rxClassifyItem;
-    private int currentCId;
     private List<TextView> tvTags;
 
     public static ClassifyListFragment newInstance(RxClassifyItem rxClassifyItem) {
@@ -81,44 +83,40 @@ public class ClassifyListFragment extends BaseFragment implements OnRefreshListe
     protected void initView() {
         View headView = LayoutInflater.from(mContext)
                 .inflate(R.layout.classify_view_headtag, null);
-        FluidLayout tagsLayout = headView.findViewById(R.id.tags_layout);
+        tagsLayout = headView.findViewById(R.id.tags_layout);
         tvTags = new ArrayList<>();
         if (rxClassifyItem != null) {
-            genTags(tagsLayout, rxClassifyItem);
+            mPresenter.genTags(rxClassifyItem);
         }
         rvClassify.setLayoutManager(new LinearLayoutManager(mContext));
         adapterArticle = new HomeAdapter();
         adapterArticle.addHeaderView(headView);
         rvClassify.setAdapter(adapterArticle);
-        //首页Banner
-        refreshLayout.setRefreshHeader(new ClassicsHeader(mContext));
+        //刷新
+        initRefreshLayout(refreshLayout);
         refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setEnableLoadmore(true);
         refreshLayout.setOnLoadmoreListener(this);
-        refreshLayout.setRefreshFooter(new ClassicsFooter(mContext)
-                .setSpinnerStyle(SpinnerStyle.Translate));
         //获取数据
         if (!EmptyUtils.isEmpty(tvTags)) {
-            onTvTagClick(tvTags.get(0));
+            mPresenter.clickTag(tvTags.get(0));
         }
     }
 
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
-        page ++;
-        getArticle(currentCId);
+        mPresenter.loadMore();
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshlayout) {
-        page = 0;
-        getArticle(currentCId);
+        mPresenter.refresh();
     }
 
-    private void genTags(FluidLayout tagsLayout, RxClassifyItem rxClassifyItem) {
-        if (rxClassifyItem == null || rxClassifyItem.getChildren() == null) {
-            return ;
-        }
+    @Override
+    public void showClsTag(List<RxClassifyItem> rxClassifyItems) {}
+
+    @Override
+    public void onGenTags(List<RxClassifyItem> rxChildClsItems) {
         List<RxClassifyItem> childItems = rxClassifyItem.getChildren();
         for (int i=0; i<childItems.size(); i++) {
             final TextView tvTag = new TextView(mContext);
@@ -140,42 +138,14 @@ public class ClassifyListFragment extends BaseFragment implements OnRefreshListe
             tvTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onTvTagClick(tvTag);
+                    mPresenter.clickTag(tvTag);
                 }
             });
         }
     }
 
-    private void getArticle(int cid) {
-        ApiWrapper.getInstance().getHomeArticle(page, cid).subscribe(new Consumer<RxArticleData>() {
-            @Override
-            public void accept(RxArticleData rxArticleData) throws Exception {
-                refreshLayout.finishRefresh();
-                refreshLayout.finishLoadmore();
-                if (EmptyUtils.isEmpty(rxArticleData.getDatas())) {
-                    refreshLayout.finishLoadmoreWithNoMoreData();
-                    return ;
-                }
-                refreshLayout.setLoadmoreFinished(false);
-                List<HomeMultiItem> homeMultiItems = new ArrayList<>();
-                for (int i=0; i<rxArticleData.getDatas().size(); i++) {
-                    homeMultiItems.add(new HomeMultiItem(rxArticleData.getDatas().get(i)));
-                }
-                if (page == 0) {
-                    adapterArticle.setNewData(homeMultiItems);
-                } else {
-                    adapterArticle.addData(homeMultiItems);
-                }
-            }
-        });
-    }
-
-    /**
-     * 点击标签响应
-     *
-     * @param tvTag
-     */
-    private void onTvTagClick(TextView tvTag) {
+    @Override
+    public void onClickTag(TextView tvTag) {
         if (tvTags != null) {
             for (TextView tv : tvTags) {
                 tv.setTextColor(ContextCompat.getColor(mContext, R.color.color_5F8AFA));
@@ -184,7 +154,24 @@ public class ClassifyListFragment extends BaseFragment implements OnRefreshListe
             tvTag.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvTag.setBackgroundResource(R.drawable.home_item_bg_cls_lable_press);
         }
-        currentCId = (int) tvTag.getTag();
-        onRefresh(refreshLayout);
     }
+
+    @Override
+    public void showArticleData(List<HomeMultiItem> homeMultiItems, boolean isRefresh) {
+        if (EmptyUtils.isEmpty(homeMultiItems)) {
+            //没有更多
+            refreshLayout.finishLoadmoreWithNoMoreData();
+            return ;
+        }
+        refreshLayout.setLoadmoreFinished(false);
+        if (isRefresh) {
+            //刷新替换
+            adapterArticle.setNewData(homeMultiItems);
+            refreshLayout.finishRefresh();
+            return ;
+        }
+        adapterArticle.addData(homeMultiItems);
+        refreshLayout.finishLoadmore();
+    }
+
 }

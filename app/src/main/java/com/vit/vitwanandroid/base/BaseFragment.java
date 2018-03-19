@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -134,6 +139,13 @@ public abstract class BaseFragment extends Fragment {
 
 
     /**-------------------- 公共方法 start ---------------------**/
+
+    protected void initRefreshLayout(SmartRefreshLayout refreshLayout) {
+        refreshLayout.setRefreshHeader(new ClassicsHeader(mContext));
+        refreshLayout.setEnableLoadmore(true);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(mContext)
+                .setSpinnerStyle(SpinnerStyle.Translate));
+    }
 
     protected void showShortToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();

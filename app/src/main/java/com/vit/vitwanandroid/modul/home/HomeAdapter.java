@@ -1,10 +1,8 @@
-package com.vit.vitwanandroid.modul.fragment.adapter;
+package com.vit.vitwanandroid.modul.home;
 
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.vit.vitwanandroid.R;
 import com.vit.vitwanandroid.bean.HomeMultiItem;
 import com.vit.vitwanandroid.bean.RxArticleItem;

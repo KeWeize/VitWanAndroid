@@ -11,10 +11,10 @@ import android.view.MenuItem;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.vit.vitwanandroid.base.BaseActivity;
-import com.vit.vitwanandroid.modul.fragment.ClassifyFragment;
-import com.vit.vitwanandroid.modul.fragment.HomeFragment;
+import com.vit.vitwanandroid.modul.classify.ClassifyFragment;
 import com.vit.vitwanandroid.modul.fragment.MineFragment;
 import com.vit.vitwanandroid.modul.fragment.ProjectFragment;
+import com.vit.vitwanandroid.modul.home.HomeFragment;
 import com.vit.vitwanandroid.utils.btmnav.BottomNavigationViewHelper;
 
 public class MainActivity extends BaseActivity {
@@ -76,12 +76,12 @@ public class MainActivity extends BaseActivity {
 
         switch (index) {
             case R.id.navigation_home:
-                fg2Show = homeFragment == null ? HomeFragment.newInstance() : homeFragment;
+                fg2Show = homeFragment == null ? new HomeFragment() : homeFragment;
                 tagCurrentFragment = TAG_MAIN_FRAGMENT;
                 break;
 
             case R.id.navigation_classify:
-                fg2Show = classifyFragment == null ? ClassifyFragment.newInstance() : classifyFragment;
+                fg2Show = classifyFragment == null ? new ClassifyFragment() : classifyFragment;
                 tagCurrentFragment = TAG_CLASSIFY_FRAGMENT;
                 break;
 
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
                 break;
 
             default:
-                fg2Show = homeFragment == null ? HomeFragment.newInstance() : homeFragment;
+                fg2Show = homeFragment == null ? new HomeFragment() : homeFragment;
                 tagCurrentFragment = TAG_MAIN_FRAGMENT;
                 break;
         }
