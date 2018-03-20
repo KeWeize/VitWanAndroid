@@ -1,5 +1,6 @@
 package com.vit.vitwanandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.vit.vitwanandroid.modul.classify.ClassifyFragment;
 import com.vit.vitwanandroid.modul.fragment.MineFragment;
 import com.vit.vitwanandroid.modul.fragment.ProjectFragment;
 import com.vit.vitwanandroid.modul.home.HomeFragment;
+import com.vit.vitwanandroid.modul.web.WebActivity;
 import com.vit.vitwanandroid.utils.btmnav.BottomNavigationViewHelper;
 
 public class MainActivity extends BaseActivity {
@@ -149,8 +151,13 @@ public class MainActivity extends BaseActivity {
                     return true;
 
                 case R.id.navigation_mine:
-                    go2Page(item.getItemId());
+//                    go2Page(item.getItemId());
+                    Intent intent = new Intent(MainActivity.this, WebActivity.class);
+                    startActivity(intent);
                     return true;
+
+                default:
+                    break;
             }
             return false;
         }

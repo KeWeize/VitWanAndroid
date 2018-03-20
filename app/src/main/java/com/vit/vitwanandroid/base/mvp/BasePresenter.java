@@ -15,6 +15,10 @@ public abstract class BasePresenter<V> {
     protected Context mContext;
     protected Reference<V> mViewRef;
 
+    public void attachView(V view) {
+        mViewRef = new WeakReference<V>(view);
+    }
+
     public void attachView(V view, Context mContext) {
         mViewRef = new WeakReference<V>(view);
         this.mContext = mContext;
